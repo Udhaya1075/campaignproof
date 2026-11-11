@@ -33,7 +33,7 @@ export default async function Settings({ searchParams }: { searchParams: { conne
         {searchParams.error && (
           <Alert tone="error">
             {MESSAGES[searchParams.error] ?? "Something went wrong."}
-            {searchParams.code && <p className="mt-1 font-mono text-xs">Buffer said: {searchParams.code.slice(0, 60)}{searchParams.desc ? ` · ${searchParams.desc.slice(0, 200)}` : ""}</p>}
+            {searchParams.code && <p className="mt-1 font-mono text-xs">Details: {searchParams.code.slice(0, 60)}{searchParams.desc ? ` · ${searchParams.desc.slice(0, 200)}` : ""}</p>}
             {searchParams.code && HINTS[searchParams.code] && <p className="mt-1">{HINTS[searchParams.code]}</p>}
           </Alert>
         )}

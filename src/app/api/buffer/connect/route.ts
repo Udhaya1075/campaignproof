@@ -14,7 +14,12 @@ export async function GET(req: NextRequest) {
   if (!rateLimit(`connect:${user.id}`, 10, 60_000).ok) return NextResponse.redirect(new URL("/settings?error=rate_limited", req.nextUrl));
 
   let env;
-  try { env = serverEnv(); } catch { return NextResponse.redirect(new URL("/settings?error=not_configured", req.nextUrl)); }
+  try { env = serverEnv(); } catch (e) {
+    // Names the broken variable(s) only, never their values.
+    const detail = e instanceof Error ? e.message.replace("Invalid environment configuration. ", "") : "unknown";
+    console.error("buffer connect: bad environment:", detail);
+    return NextResponse.redirect(new URL(`/settings?error=not_configured&code=config&desc=${encodeURIComponent(detail.slice(0, 200))}`, req.nextUrl));
+  }
 
   const state = randomUrlSafe(24);
   const verifier = randomUrlSafe(48);
